@@ -1,0 +1,2 @@
+currencies: ['AUD', 'GBP', 'JPY', 'USD']
+rawData_path: 'data/01_raw'
