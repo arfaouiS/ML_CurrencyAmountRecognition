@@ -13,8 +13,12 @@ resized_pictures:
   filepath: data/02_intermediate/resized_pictures
   layer: intermediate
 
-
-dataset_with_features:
+augmented_data:
   type: pickle.PickleDataSet
-  filepath: data/04_feature/dataset
+  filepath: data/03_primary/augmented_data
+  layer: primary
+
+final_data:
+  type: pickle.PickleDataSet
+  filepath: data/04_feature/final_data
   layer: feature
