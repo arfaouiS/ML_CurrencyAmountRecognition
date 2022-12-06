@@ -14,5 +14,10 @@ def create_pipeline(**kwargs) -> Pipeline:
             outputs="banknote_pictures",
             name="banknote_pictures"
         ),
-
+        node(
+            func=resize_pictures,
+            inputs="banknote_pictures",
+            outputs="resized_pictures",
+            name="resized_pictures"
+        ),
     ])

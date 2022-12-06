@@ -11,6 +11,7 @@
 from PIL import Image
 import pandas as pd
 import numpy as np
+import math
 import os
 
 
@@ -24,4 +25,18 @@ def banknote_dataframe(src: str, currencies: list) -> pd.DataFrame:
             pictures.append([np.asarray(img), currency, amount])
     return pd.DataFrame(pictures, columns=['image', 'currency', 'amount'])
 
+
+def resize_pictures(dataframe: pd.DataFrame) -> pd.DataFrame:
+    size_width, ratio = {}, []
+    for i in dataframe.index:
+        w, h, c = dataframe['image'][i].shape
+        size_width[w * h] = w
+        ratio.append(w / h)
+    min_width = size_width[sorted(size_width.keys())[0]]
+    width = int(math.ceil(min_width / 100.0)) * 100
+    ratio = sum(ratio) / len(ratio)
+    height = round(width * ratio)
+    dataframe['image'] = dataframe['image'].apply(
+        lambda img: np.asarray(Image.fromarray(np.uint8(img)).resize((width, height))))
+    return dataframe
 

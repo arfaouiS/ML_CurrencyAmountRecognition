@@ -8,3 +8,7 @@ banknote_pictures:
   filepath: data/02_intermediate/banknote_pictures
   layer: intermediate
 
+resized_pictures:
+  type: pickle.PickleDataSet
+  filepath: data/02_intermediate/resized_pictures
+  layer: intermediate
