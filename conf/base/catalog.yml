@@ -12,3 +12,9 @@ resized_pictures:
   type: pickle.PickleDataSet
   filepath: data/02_intermediate/resized_pictures
   layer: intermediate
+
+
+dataset_with_features:
+  type: pickle.PickleDataSet
+  filepath: data/04_feature/dataset
+  layer: feature

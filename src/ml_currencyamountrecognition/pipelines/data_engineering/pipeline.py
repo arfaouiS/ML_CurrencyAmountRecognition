@@ -20,4 +20,11 @@ def create_pipeline(**kwargs) -> Pipeline:
             outputs="resized_pictures",
             name="resized_pictures"
         ),
+        node(
+            func=feature_extraction,
+            inputs="resized_pictures",
+            outputs="dataset_with_features",
+            name="dataset_with_features"
+        ),
+
     ])
