@@ -39,15 +39,12 @@ def resize_pictures(dataframe: pd.DataFrame) -> pd.DataFrame:
 
 #Function that crops the image depending on the size given in paramters
 def crop_image(img,y,x,h,w):
-    #img = cv2.imread(img_path)
     cropped_image = img[y:y+h, x:x+w]
     return cropped_image
 
 
 # Function that detects the contour of all items in the image And returns a list of cropped images based on the detected items
-def detect_contours_of_all_elements(img_array): 
-    #image = Image.fromarray(np.uint8(img_array))
-    #image = cv2.imread(img_path) 
+def detect_contours_of_all_elements(img_array):  
     gray = cv2.cvtColor(img_array,cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray,(5,5),0)
     thresh = cv2.adaptiveThreshold(blur,255,1,1,11,2)
