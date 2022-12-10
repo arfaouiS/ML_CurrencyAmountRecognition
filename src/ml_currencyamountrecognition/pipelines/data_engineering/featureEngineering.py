@@ -1,12 +1,3 @@
-'''
-     OK Convertir les images aux mêmes format  dans le dossier 02_intermediate
-     OK Etudier les tailles et tout mettre à la même dimension
-     KO Etudier la distribution des images dans un graphique
-     Mettre dans un dataframe
-        KO Data augmentation
-        OK Feature extraction
-'''
-
 from skimage import filters, feature
 from scipy import ndimage as nd
 from PIL import Image
@@ -43,7 +34,7 @@ def resize_pictures(dataframe: pd.DataFrame) -> pd.DataFrame:
     return dataframe
 
 
-def img_ratation(img_array, rotation):
+def img_rotation(img_array, rotation):
     height, width = img_array.shape[:2]
     rotation_matrix = cv2.getRotationMatrix2D((width / 2, height / 2), rotation, .5)
     rotated_img = cv2.warpAffine(img_array, rotation_matrix, (width, height))
@@ -51,17 +42,20 @@ def img_ratation(img_array, rotation):
 
 
 def data_augmentation(dataframe: pd.DataFrame) -> pd.DataFrame:
-    for i in dataframe.index:
-        img = dataframe['image'][i]
-        currency = dataframe['currency'][i]
-        amount = dataframe['amount'][i]
-        dataframe.append({'image': img_ratation(img, 45), 'currency': currency, 'amount': amount}, ignore_index=True)
-        dataframe.append({'image': img_ratation(img, 90), 'currency': currency, 'amount': amount}, ignore_index=True)
-        dataframe.append({'image': img_ratation(img, 130), 'currency': currency, 'amount': amount}, ignore_index=True)
-        dataframe.append({'image': np.flipud(img), 'currency': currency, 'amount': amount}, ignore_index=True)
-        dataframe.append({'image': np.fliplr(img), 'currency': currency, 'amount': amount}, ignore_index=True)
-        dataframe.append({'image': cv2.medianBlur(img, 5), 'currency': currency, 'amount': amount}, ignore_index=True)
-    return dataframe
+    df_rotation45 = dataframe.copy()
+    df_rotation90 = dataframe.copy()
+    df_rotation130 = dataframe.copy()
+    df_fliph = dataframe.copy()
+    df_flipv = dataframe.copy()
+    df_blur = dataframe.copy()
+    df_rotation45['image'] = df_rotation45["image"].apply(lambda img: img_rotation(img, 45))
+    df_rotation90['image'] = df_rotation90["image"].apply(lambda img: img_rotation(img, 90))
+    df_rotation130['image'] = df_rotation130["image"].apply(lambda img: img_rotation(img, 140))
+    df_fliph['image'] = df_fliph["image"].apply(lambda img: np.flipud(img))
+    df_flipv['image'] = df_flipv["image"].apply(lambda img: np.fliplr(img))
+    df_blur['image'] = df_blur["image"].apply(lambda img:cv2.medianBlur(img, 5))
+    frames = (dataframe, df_rotation45, df_rotation90, df_rotation130, df_fliph, df_flipv, df_blur)
+    return pd.concat(frames)
 
 
 def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
@@ -75,4 +69,10 @@ def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["invert"] = dataframe["image"].apply(lambda img_array: cv2.bitwise_not(img_array))
     dataframe["sobel"] = dataframe["image"].apply(lambda img_array: filters.sobel(img_array))
     dataframe["gradient"] = dataframe["image"].apply(lambda img_array: cv2.Laplacian(img_array, cv2.CV_64F))
+
     return dataframe
+
+
+
+
+
