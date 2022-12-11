@@ -8,9 +8,9 @@ import cv2
 import os
 
 
-def banknote_dataframe(src: str, currencies: list) -> pd.DataFrame:
+def banknote_dataframe(src: str, currency_folder_names: list) -> pd.DataFrame:
     pictures = []
-    for currency in currencies:
+    for currency in currency_folder_names:
         for filename in os.listdir(os.path.join(src, currency)):
             image_path = os.path.join(src, currency, filename)
             amount = filename.split('_')[1]
@@ -57,20 +57,31 @@ def data_augmentation(dataframe: pd.DataFrame) -> pd.DataFrame:
     frames = (dataframe, df_rotation45, df_rotation90, df_rotation130, df_fliph, df_flipv, df_blur)
     return pd.concat(frames)
 
-
 def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["gray_image"] = dataframe["image"].apply(lambda img_array: cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY))
     dataframe["edge"] = dataframe["gray_image"].apply(lambda img_array: feature.canny(img_array))
     dataframe["prewitt_v"] = dataframe["gray_image"].apply(lambda img_array: filters.prewitt_v(img_array))
     dataframe["prewitt_h"] = dataframe["gray_image"].apply(lambda img_array: filters.prewitt_h(img_array))
     dataframe["farid"] = dataframe["gray_image"].apply(lambda img_array: filters.farid(img_array))
-    dataframe["variance"] = dataframe["gray_image"].apply(
-        lambda img_array: nd.generic_filter(img_array, np.var, size=3))
+    dataframe["variance"] = dataframe["gray_image"].apply(lambda img_array: nd.generic_filter(img_array, np.var, size=3))
     dataframe["invert"] = dataframe["image"].apply(lambda img_array: cv2.bitwise_not(img_array))
     dataframe["sobel"] = dataframe["image"].apply(lambda img_array: filters.sobel(img_array))
     dataframe["gradient"] = dataframe["image"].apply(lambda img_array: cv2.Laplacian(img_array, cv2.CV_64F))
-
     return dataframe
+
+
+def normalize_data(dataframe: pd.DataFrame) -> pd.DataFrame:
+    dataframe["image"] = dataframe["image"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    dataframe["gray_image"] = dataframe["gray_image"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    dataframe["prewitt_h"] = dataframe["prewitt_h"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    dataframe["prewitt_v"] = dataframe["prewitt_v"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    dataframe["farid"] = dataframe["farid"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    dataframe["variance"] = dataframe["variance"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    dataframe["invert"] = dataframe["invert"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    dataframe["sobel"] = dataframe["sobel"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    dataframe["gradient"] = dataframe["gradient"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
+    return dataframe
+
 
 
 
