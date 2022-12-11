@@ -14,3 +14,5 @@ pillow~=9.3.0
 scipy~=1.7.3
 scikit-image~=0.19.3
 opencv-python~=4.6.0.66
+sklearn~=0.0.post1
+scikit-learn~=1.0.2

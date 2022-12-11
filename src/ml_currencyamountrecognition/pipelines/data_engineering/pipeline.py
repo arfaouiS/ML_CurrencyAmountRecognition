@@ -6,11 +6,13 @@ generated using Kedro 0.18.3
 from kedro.pipeline import Pipeline, node, pipeline
 from .featureEngineering import *
 
+
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
+
         node(
             func=banknote_dataframe,
-            inputs=["params:rawData_path", "params:currencies"],
+            inputs=["params:rawData_path", "params:currency_folder_names"],
             outputs="banknote_pictures",
             name="banknote_pictures"
         ),
@@ -21,10 +23,29 @@ def create_pipeline(**kwargs) -> Pipeline:
             name="resized_pictures"
         ),
         node(
-            func=feature_extraction,
+            func=data_augmentation,
             inputs="resized_pictures",
-            outputs="dataset_with_features",
-            name="dataset_with_features"
+            outputs="augmented_data",
+            name="augmented_data"
         ),
+        node(
+            func=feature_extraction,
+            inputs="augmented_data",
+            outputs="dataWithFeatures",
+            name="dataWithFeatures"
+        ),
+        node(
+            func=normalize_data,
+            inputs="dataWithFeatures",
+            outputs="normalized_data",
+            name="normalized_data"
+        ),
+        node(
+            func=ordinal_data_encoding,
+            inputs="normalized_data",
+            outputs="encoded_data",
+            name="encoded_data"
+        ),
+
 
     ])
