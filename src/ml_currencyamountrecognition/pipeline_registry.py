@@ -7,8 +7,8 @@ from ml_currencyamountrecognition.pipelines import data_engineering as de
 
 
 def register_pipelines() -> Dict[str, Pipeline]:
-    """Register the project's pipelines.
-
+    """
+    Register the project's pipelines.
     Returns:
         A mapping from pipeline names to ``Pipeline`` objects.
     """

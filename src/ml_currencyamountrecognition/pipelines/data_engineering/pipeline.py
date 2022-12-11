@@ -31,8 +31,21 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             func=feature_extraction,
             inputs="augmented_data",
-            outputs="final_data",
-            name="final_data"
+            outputs="dataWithFeatures",
+            name="dataWithFeatures"
         ),
+        node(
+            func=normalize_data,
+            inputs="dataWithFeatures",
+            outputs="normalized_data",
+            name="normalized_data"
+        ),
+        node(
+            func=ordinal_data_encoding,
+            inputs="normalized_data",
+            outputs="encoded_data",
+            name="encoded_data"
+        ),
+
 
     ])

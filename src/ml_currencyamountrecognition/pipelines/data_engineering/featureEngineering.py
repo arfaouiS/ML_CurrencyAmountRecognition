@@ -1,4 +1,5 @@
 from skimage import filters, feature
+from sklearn import preprocessing
 from scipy import ndimage as nd
 from PIL import Image
 import pandas as pd
@@ -57,6 +58,7 @@ def data_augmentation(dataframe: pd.DataFrame) -> pd.DataFrame:
     frames = (dataframe, df_rotation45, df_rotation90, df_rotation130, df_fliph, df_flipv, df_blur)
     return pd.concat(frames)
 
+
 def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["gray_image"] = dataframe["image"].apply(lambda img_array: cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY))
     dataframe["edge"] = dataframe["gray_image"].apply(lambda img_array: feature.canny(img_array))
@@ -67,6 +69,14 @@ def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["invert"] = dataframe["image"].apply(lambda img_array: cv2.bitwise_not(img_array))
     dataframe["sobel"] = dataframe["image"].apply(lambda img_array: filters.sobel(img_array))
     dataframe["gradient"] = dataframe["image"].apply(lambda img_array: cv2.Laplacian(img_array, cv2.CV_64F))
+    return dataframe
+
+
+def ordinal_data_encoding(dataframe: pd.DataFrame) -> pd.DataFrame:
+    label_encoder = preprocessing.LabelEncoder()
+    onehot_encoder = preprocessing.OneHotEncoder()
+    dataframe["currency"] = label_encoder.fit_transform(dataframe["currency"])
+    dataframe["edge"] = dataframe["edge"].apply(lambda img_array: onehot_encoder.fit_transform(img_array))
     return dataframe
 
 
@@ -81,6 +91,8 @@ def normalize_data(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["sobel"] = dataframe["sobel"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
     dataframe["gradient"] = dataframe["gradient"].apply(lambda img_array: img_array/np.linalg.norm(img_array))
     return dataframe
+
+
 
 
 
