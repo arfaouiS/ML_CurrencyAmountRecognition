@@ -32,3 +32,8 @@ encoded_data:
   type: pickle.PickleDataSet
   filepath: data/04_feature/encoded_data
   layer: feature
+
+data_distribution:
+  type: kedro.extras.datasets.matplotlib.MatplotlibWriter
+  filepath: data/09_visualization/labels_distribution.png
+  layer: visualization

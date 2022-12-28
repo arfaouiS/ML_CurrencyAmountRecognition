@@ -100,3 +100,13 @@ kedro ipython
 ```
 
 
+### STEPS
+0. conda update -n base -c defaults conda
+1. conda create --name kedro-project python=3.7 -y
+2. conda create -n kedro-project python=3.8 -y
+3. conda activate kedro-project
+4. python  -m pip install --upgrade pip
+5. pip install -e src
+6. pip install "kedro[matplotlib.MatplotlibWriter]" : pour matplotlib voir si il faut le refaire ou juste mettre dabs requirement
+
+
