@@ -40,7 +40,12 @@ encoded_data:
 
 data_distribution:
   type: kedro.extras.datasets.matplotlib.MatplotlibWriter
-  filepath: data/09_visualization/labels_distribution.png
+  filepath: data/09_visualization/label_distribution.png
+  layer: visualization
+
+currency_distribution:
+  type: kedro.extras.datasets.matplotlib.MatplotlibWriter
+  filepath: data/09_visualization/currency_distribution.png
   layer: visualization
 
 images_plot:

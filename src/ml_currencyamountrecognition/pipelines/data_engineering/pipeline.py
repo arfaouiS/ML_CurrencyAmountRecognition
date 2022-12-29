@@ -48,22 +48,27 @@ def create_pipeline(**kwargs) -> Pipeline:
             name="standardized_data"
         ),
         node(
-            func=images_visualization,
+            func=label_balanced,
+            inputs="standardized_data",
+            outputs="data_distribution",
+            name="data_distribution"
+        ),
+        node(
+            func=currency_balanced,
+            inputs="standardized_data",
+            outputs="currency_distribution",
+            name="currency_distribution"
+        ),
+        node(
+            func=outliers_detection,
             inputs="standardized_data",
             outputs="images_plot",
-            name="images_plot"
+            name="outliers_detection"
         ),
         node(
             func=ordinal_data_encoding,
-            inputs="normalized_data",
+            inputs="standardized_data",
             outputs="encoded_data",
             name="encoded_data"
         ),
-
-        node(
-            func=label_balanced,
-            inputs="augmented_data",
-            outputs="data_distribution",
-            name="data_distribution"
-        )
     ])
