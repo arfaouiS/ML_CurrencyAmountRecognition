@@ -28,7 +28,27 @@ normalized_data:
   filepath: data/04_feature/normalized_data
   layer: feature
 
+standardized_data:
+  type: pickle.PickleDataSet
+  filepath: data/04_feature/standardized_data
+  layer: feature
+
 encoded_data:
   type: pickle.PickleDataSet
   filepath: data/04_feature/encoded_data
   layer: feature
+
+data_distribution:
+  type: kedro.extras.datasets.matplotlib.MatplotlibWriter
+  filepath: data/09_visualization/label_distribution.png
+  layer: visualization
+
+currency_distribution:
+  type: kedro.extras.datasets.matplotlib.MatplotlibWriter
+  filepath: data/09_visualization/currency_distribution.png
+  layer: visualization
+
+images_plot:
+  type: kedro.extras.datasets.matplotlib.MatplotlibWriter
+  filepath: data/09_visualization/images_plot.png
+  layer: visualization
