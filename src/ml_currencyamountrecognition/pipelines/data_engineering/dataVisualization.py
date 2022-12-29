@@ -1,6 +1,8 @@
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
 
 
 #TODO: correlation des données pour sélectionner les features
@@ -11,6 +13,38 @@ import matplotlib.pyplot as plt
 
 def label_balanced(dataframe: pd.DataFrame):
     sns.countplot(data=dataframe, x="amount", hue="currency")
+    return plt
+
+
+def images_visualization(dataframe: pd.DataFrame) -> pd.DataFrame:
+    images = []
+    for i in range(len(dataframe)):
+        images.append(dataframe.image[i])
+    pca = PCA(n_components=2)
+    data = pca.fit_transform(images)
+    currency_label = dataframe['currency']
+    amount_labels = dataframe['amount']
+    labels = dataframe.apply(lambda x: str(x.currency) + ' - ' + str(x.amount), axis=1)
+    fig, ax = plt.subplots(2,2, figsize=(8, 4))
+    ax[0, 0].set_title("Currencies of data")
+    ax[0, 1].set_title("Amounts of data")
+    ax[1, 0].set_title("Currencies and amounts of data")
+    ax[1, 1].set_title("Data")
+    for currency in np.unique(currency_label):
+        i = np.where(currency_label == currency)
+        ax[0, 0].scatter(data[:, 0][i], data[:, 1][i], label=currency)
+    ax[0, 0].legend(title='currency', loc='upper left', bbox_to_anchor=(1, 1))
+    for amount in np.unique(amount_labels):
+        i = np.where(amount_labels == amount)
+        ax[0, 1].scatter(data[:, 0][i], data[:, 1][i], label=amount)
+    ax[0, 1].legend(title='amount', loc='upper left', bbox_to_anchor=(1, 1))
+    for label in np.unique(labels):
+        i = np.where(labels == label)
+        ax[1, 0].scatter(data[:, 0][i], data[:, 1][i], label=label)
+    ax[1, 0].legend(title='currency - amount', loc='upper left', bbox_to_anchor=(1, 1))
+    ax[1, 1].scatter(data[:, 0], data[:, 1])
+    fig.tight_layout()
+    plt.show()
     return plt
 
 '''

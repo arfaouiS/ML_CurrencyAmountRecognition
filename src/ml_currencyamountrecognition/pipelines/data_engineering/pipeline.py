@@ -36,10 +36,22 @@ def create_pipeline(**kwargs) -> Pipeline:
             name="dataWithFeatures"
         ),
         node(
-            func=normalize_data,
+            func=data_normalisation,
             inputs="dataWithFeatures",
             outputs="normalized_data",
             name="normalized_data"
+        ),
+        node(
+            func=data_standardisation,
+            inputs="normalized_data",
+            outputs="standardized_data",
+            name="standardized_data"
+        ),
+        node(
+            func=images_visualization,
+            inputs="standardized_data",
+            outputs="images_plot",
+            name="images_plot"
         ),
         node(
             func=ordinal_data_encoding,
