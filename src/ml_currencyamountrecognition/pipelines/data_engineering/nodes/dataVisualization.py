@@ -6,14 +6,12 @@ from sklearn.decomposition import PCA
 
 
 #TODO: correlation des données pour sélectionner les features
-#TODO: Distribution des données : si une classe est prépondérrante l'algo va trop souvent prédire cette classe et avoir de bon résultat
-#TODO: visualisation des données pour voir les outliers
-#https://scikit-learn.org/stable/auto_examples/classification/plot_digits_classification.html
 
 
 def label_balanced(dataframe: pd.DataFrame):
     sns.countplot(data=dataframe, x="amount", hue="currency")
     return plt
+
 
 def currency_balanced(data: pd.DataFrame):
         plt.subplot(2, 1, 1)
@@ -25,6 +23,7 @@ def currency_balanced(data: pd.DataFrame):
         plt.legend(labels, title="Categories", bbox_to_anchor=(0.85, 1.025), loc="upper left")
         plt.title("{} distribution".format("currency"))
         return plt
+
 
 def outliers_detection(dataframe: pd.DataFrame):
     images = []

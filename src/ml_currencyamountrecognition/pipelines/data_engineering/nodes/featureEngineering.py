@@ -1,5 +1,4 @@
 from skimage import filters, feature
-from sklearn import preprocessing
 from scipy import ndimage as nd
 from PIL import Image
 import pandas as pd
@@ -10,7 +9,7 @@ import cv2
 import os
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = 'Tesseract-OCR\\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 
 def banknote_dataframe(src: str, currency_folder_names: list) -> pd.DataFrame:
@@ -77,38 +76,6 @@ def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
     return dataframe
 
 
-def ordinal_data_encoding(dataframe: pd.DataFrame) -> pd.DataFrame:
-    label_encoder = preprocessing.LabelEncoder()
-    onehot_encoder = preprocessing.OneHotEncoder()
-    dataframe["currency"] = label_encoder.fit_transform(dataframe["currency"])
-    dataframe["edge"] = dataframe["edge"].apply(lambda img_array: onehot_encoder.fit_transform(img_array).toarray())
-    #dataframe["text"] = dataframe["text"].apply(lambda txt: txt.encode('unicode_escape'))
-    return dataframe
-
-
-def data_normalisation(dataframe: pd.DataFrame) -> pd.DataFrame:
-    dataframe["image"] = dataframe["image"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["gray_image"] = dataframe["gray_image"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["prewitt"] = dataframe["prewitt"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["farid"] = dataframe["farid"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["variance"] = dataframe["variance"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["invert"] = dataframe["invert"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["sobel"] = dataframe["sobel"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["gradient"] = dataframe["gradient"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    return dataframe
-
-def data_standardisation(dataframe: pd.DataFrame) -> pd.DataFrame:
-    dataframe["image"] = dataframe["image"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["gray_image"] = dataframe["gray_image"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["prewitt"] = dataframe["prewitt"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["farid"] = dataframe["farid"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["variance"] = dataframe["variance"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["invert"] = dataframe["invert"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["sobel"] = dataframe["sobel"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["gradient"] = dataframe["gradient"].apply(lambda img_array: img_array.reshape(-1))
-    return dataframe
-
-
 # Function that crops the image depending on the size given in paramters
 def crop_image(img, y, x, h, w):
     cropped_image = img[y:y + h, x:x + w]
@@ -170,3 +137,4 @@ def extract_text_from_image(image):  # image_path
         if (len(text[:-1]) != 0 and text[:-1] not in texts):
             texts = texts + text[:-1]
     return texts
+

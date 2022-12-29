@@ -4,8 +4,9 @@ generated using Kedro 0.18.3
 """
 
 from kedro.pipeline import Pipeline, node, pipeline
-from .featureEngineering import *
-from .dataVisualization import *
+from .nodes.featureEngineering import *
+from .nodes.dataVisualization import *
+from .nodes.preprocessing import *
 
 
 def create_pipeline(**kwargs) -> Pipeline:
