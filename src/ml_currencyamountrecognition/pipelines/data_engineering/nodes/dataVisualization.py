@@ -5,14 +5,20 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 
 
-#TODO: correlation des données pour sélectionner les features
-
-
+'''
+Display label distribution in histogram
+Args:
+    dataframe containing data and labels
+'''
 def label_balanced(dataframe: pd.DataFrame):
     sns.countplot(data=dataframe, x="amount", hue="currency")
     return plt
 
-
+'''
+Display currency label distribution in pie plot
+Args:
+    dataframe containing data and labels
+'''
 def currency_balanced(data: pd.DataFrame):
         plt.subplot(2, 1, 1)
         x = data["currency"].value_counts().index
@@ -24,7 +30,11 @@ def currency_balanced(data: pd.DataFrame):
         plt.title("{} distribution".format("currency"))
         return plt
 
-
+'''
+Displays all data according to their labels
+Args:
+    dataframe containing data and labels
+'''
 def outliers_detection(dataframe: pd.DataFrame):
     images = []
     for i in range(len(dataframe)):

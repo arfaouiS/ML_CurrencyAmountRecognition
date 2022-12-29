@@ -3,15 +3,20 @@ from scipy import ndimage as nd
 from PIL import Image
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 import math
 import cv2
 import os
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
-
+'''
+Builds a dataframe, from pictures in folders.
+Args:
+    src : foler path of the images 
+    currency_folder_names : folder names, each folder contains currency images
+Returns: 
+    dataframe: dataframe containing image arrays and labels
+'''
 def banknote_dataframe(src: str, currency_folder_names: list) -> pd.DataFrame:
     pictures = []
     for currency in currency_folder_names:
@@ -22,7 +27,14 @@ def banknote_dataframe(src: str, currency_folder_names: list) -> pd.DataFrame:
             pictures.append([np.asarray(img), currency, amount])
     return pd.DataFrame(pictures, columns=['image', 'currency', 'amount'])
 
-
+'''
+Calculate the dimension of the smallest image and resize each image to this 
+dimension while maintaining the width/length ratio.
+Args:
+    dataframe : dataframe containing image arrays
+Returns: 
+    dataframe : dataframe with all image arrays at the same dimension
+'''
 def resize_pictures(dataframe: pd.DataFrame) -> pd.DataFrame:
     size_width, ratio = {}, []
     for i in dataframe.index:
@@ -37,14 +49,27 @@ def resize_pictures(dataframe: pd.DataFrame) -> pd.DataFrame:
         lambda img: np.asarray(Image.fromarray(np.uint8(img)).resize((width, height))))
     return dataframe
 
-
+'''
+Performs a rotation on the image with a degree given in parameter.
+Args:
+    img_array : image array
+    rotation : degrees of image rotation
+Returns:
+    rotated_img : rotated image array
+'''
 def img_rotation(img_array, rotation):
     height, width = img_array.shape[:2]
     rotation_matrix = cv2.getRotationMatrix2D((width / 2, height / 2), rotation, .5)
     rotated_img = cv2.warpAffine(img_array, rotation_matrix, (width, height))
     return rotated_img
 
-
+''' 
+Increase the number of data by adding images by rotation or by adding noise from existing images.
+Args:
+    dataframe : dataframe containing images
+Returns:
+    dataframe : dataframe with more data
+'''
 def data_augmentation(dataframe: pd.DataFrame) -> pd.DataFrame:
     df_rotation45 = dataframe.copy()
     df_rotation90 = dataframe.copy()
@@ -61,10 +86,16 @@ def data_augmentation(dataframe: pd.DataFrame) -> pd.DataFrame:
     frames = (dataframe, df_rotation45, df_rotation90, df_rotation130, df_fliph, df_flipv, df_blur)
     return pd.concat(frames, ignore_index=True)
 
-
+'''
+Feature extraction by creating new features from the images.
+Args: 
+    dataframe: dataframe containing images
+Returns:
+    dataframe: dataframe with new features 
+'''
 def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["gray_image"] = dataframe["image"].apply(lambda img_array: cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY))
-    dataframe["edge"] = dataframe["gray_image"].apply(lambda img_array: feature.canny(img_array, sigma=3))
+    dataframe["edge"] = dataframe["gray_image"].apply(lambda img_array: 1 * feature.canny(img_array, sigma=3))
     dataframe["prewitt"] = dataframe["gray_image"].apply(lambda img_array: filters.prewitt(img_array))
     dataframe["farid"] = dataframe["gray_image"].apply(lambda img_array: filters.farid(img_array))
     dataframe["variance"] = dataframe["gray_image"].apply(
@@ -72,17 +103,17 @@ def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["invert"] = dataframe["image"].apply(lambda img_array: cv2.bitwise_not(img_array))
     dataframe["sobel"] = dataframe["image"].apply(lambda img_array: filters.sobel(img_array))
     dataframe["gradient"] = dataframe["image"].apply(lambda img_array: cv2.Laplacian(img_array, cv2.CV_64F))
-    #dataframe["text"] = dataframe["image"].apply(lambda img_array: extract_text_from_image(img_array))
+    dataframe["text"] = dataframe["image"].apply(lambda img_array: extract_text_from_image(img_array))
     return dataframe
 
 
-# Function that crops the image depending on the size given in paramters
-def crop_image(img, y, x, h, w):
-    cropped_image = img[y:y + h, x:x + w]
-    return cropped_image
-
-
-# Function that detects the contour of all items in the image And returns a list of cropped images based on the detected items
+'''
+Detects the contour of all items in the image and returns a list of cropped images based on the detected items
+Args:
+    img_array: image array
+Returns:
+    cropped_images: list of cropped images based on the detected items
+'''
 def detect_contours_of_all_elements(img_array):
     gray = cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY)
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -93,21 +124,33 @@ def detect_contours_of_all_elements(img_array):
         if cv2.contourArea(cnt) > 50:
             [x, y, w, h] = cv2.boundingRect(cnt)
             if h > 28:
-                cropped_image = crop_image(img_array, y, x, h, w)
+                cropped_image = img_array[y:y + h, x:x + w]
                 cropped_images.append(cropped_image)
     return cropped_images
 
 
-# Function that denoise the image given in parameter
+'''
+Denoise and filter the image given in parameter.
+Args:
+    image
+Return:
+    gray_img : denoise and filtered image 
+'''
 def treat_And_filter(image):
-    plt.style.use('seaborn')
     dst = cv2.fastNlMeansDenoisingColored(image, None, 11, 6, 7, 21)
     img_denoised = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
     gray_img = cv2.cvtColor(img_denoised, cv2.COLOR_BGR2GRAY)
     return gray_img
 
 
-# Function that reads the text in the given image
+# TODO : Mettre le chemin de tesseract en parametre et dans le fichier parameter.yml
+'''
+Reads the text in the given image.
+Args: 
+    image_path (str): the path of an image
+Returns:
+    text (str): text detected on the image by the executable tesseract.exe
+'''
 def read_text(image_path):
     img = cv2.imread(image_path)
     # Cvt to hsv
@@ -117,24 +160,31 @@ def read_text(image_path):
     krn = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 3))
     dlt = cv2.dilate(msk, krn, iterations=1)
     thr = 255 - cv2.bitwise_and(dlt, msk)
-    d = pytesseract.image_to_string(thr, config="--psm 10")
-    return d
+    pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+    text = pytesseract.image_to_string(thr, config="--psm 10")
+    return text
 
 
-def extract_text_from_image(image):  # image_path
+'''
+Processes the image given in parameter and extracts the text it contains.
+Args:
+    image
+Returns:
+    texts : text extracted from the image
+'''
+def extract_text_from_image(image):
     images = detect_contours_of_all_elements(image)
     texts = ''
     count = 0
     for img in images:
-        # 1. Denoise & filter image
+        # Denoise & filter image
         filtered_img = treat_And_filter(img)
         i = Image.fromarray(filtered_img)
         filtered_img_path = r'data\02_intermediate\temp_' + str(count) + '.jpg'
         count = count + 1
         i.save(filtered_img_path)
-        # 2. Read text
+        # Extract text
         text = read_text(filtered_img_path)
-        if (len(text[:-1]) != 0 and text[:-1] not in texts):
+        if len(text[:-1]) != 0 and text[:-1] not in texts:
             texts = texts + text[:-1]
     return texts
-
