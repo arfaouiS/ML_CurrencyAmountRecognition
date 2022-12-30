@@ -18,19 +18,19 @@ def create_pipeline(**kwargs) -> Pipeline:
         node(
             func=naiveBayesModel,
             inputs=["X_train", "y_train", "params:nbGridparams"],
-            outputs="naiveBayesModel",
+            outputs="nb_model",
             name="naiveBayesModel"
         ),
         node(
             func=kNeighborsClassifier,
             inputs=["X_train", "y_train", "params:knnGridparams"],
-            outputs="kNeighborsClassifier",
+            outputs="knn_model",
             name="kNeighborsClassifier"
         ),
         node(
             func=decisionTreeClassifier,
             inputs=["X_train", "y_train", "params:decisionTreeGridparams"],
-            outputs="decisionTreeClassifier",
+            outputs="dtc_model",
             name="decisionTreeClassifier"
         ),
         node(

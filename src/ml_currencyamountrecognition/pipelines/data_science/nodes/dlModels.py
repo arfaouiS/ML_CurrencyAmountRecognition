@@ -14,6 +14,7 @@ Returns :
     dataframe : the model
 '''
 def construct_CNN_model1(X_train, X_val, y_train, y_val):
+    print("********** X TRAIN *************** \n", X_train, "\n ************** TYPE ************** ", type(X_train))
     model = Sequential()
     model.add(Reshape((X_train.shape[1], X_train.shape[2], 1), input_shape=(X_train.shape[1], X_train.shape[2])))
     model.add(Conv2D(filters=32, kernel_size=(3, 3), activation='relu'))

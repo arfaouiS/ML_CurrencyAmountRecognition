@@ -1,4 +1,4 @@
-currency_folder_names: ['EURO','GBP', 'JPY']
+currency_folder_names: ['EURO']
 rawData_path: 'data/01_raw'
 svmGridparams: {'C': [1, 10, 100], 'gamma': [1, 0.1, 0.01]}
 nbGridparams: {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6]}
