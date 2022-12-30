@@ -39,28 +39,4 @@ def create_pipeline(**kwargs) -> Pipeline:
             outputs="model_feedward_neural_network",
             name="model_feedward_neural_network"
         ),
-        node(
-            func=svmModel,
-            inputs=["X_train", "y_train", "params:svmGridparams"],
-            outputs="svm_model",
-            name="svm_model"
-        ),
-        node(
-            func=naiveBayesModel,
-            inputs=["X_train", "y_train", "params:nbGridparams"],
-            outputs="nb_model",
-            name="naiveBayesModel"
-        ),
-        node(
-            func=kNeighborsClassifier,
-            inputs=["X_train", "y_train", "params:knnGridparams"],
-            outputs="knn_model",
-            name="kNeighborsClassifier"
-        ),
-        node(
-            func=decisionTreeClassifier,
-            inputs=["X_train", "y_train", "params:decisionTreeGridparams"],
-            outputs="dtc_model",
-            name="decisionTreeClassifier"
-        ),
     ])
