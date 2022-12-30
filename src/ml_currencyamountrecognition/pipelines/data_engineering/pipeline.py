@@ -75,6 +75,12 @@ def create_pipeline(**kwargs) -> Pipeline:
             func=data_preparation_for_MLmodels,
             inputs="encoded_data",
             outputs=["X_train", "X_test", "y_train", "y_test"],
-            name="data_for_model"
+            name="data_for_modelML"
+        ),
+        node(
+            func=data_preparation_for_DeepLearning_models,
+            inputs="encoded_data",
+            outputs=["X_train_DL", "X_test_DL", "X_val_DL", "y_train_DL", "y_test_DL", "y_val_DL"],
+            name="data_for_modelDL"
         ),
     ])

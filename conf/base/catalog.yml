@@ -73,6 +73,37 @@ y_test:
   filepath: data/05_model_input/test_labels
   layer: model_input
 
+X_train_DL:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/train_features
+  layer: model_input
+
+y_train_DL:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/train_labels
+  layer: model_input
+
+X_test_DL:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/test_features
+  layer: model_input
+
+y_test_DL:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/test_labels
+  layer: model_input
+
+X_val_DL:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/X_val
+  layer: model_input
+
+y_val_DL:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/y_val
+  layer: model_input
+
+
 svm_model:
   type: pickle.PickleDataSet
   filepath: data/06_models/svm_model
@@ -93,6 +124,31 @@ dtc_model:
   filepath: data/06_models/decisionTree_model
   layer: model
 
+model_LSTM1:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/model_LSTM1
+  layer: models
+
+model_LSTM2:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/model_LSTM2
+  layer: models
+
+model_CNN1:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/model_CNN1
+  layer: models
+
+model_CNN2:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/model_CNN2
+  layer: models
+
+model_feedward_neural_network:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/model_feedward_neural_network
+  layer: models
+
 svmScores:
   type: pickle.PickleDataSet
   filepath: data/07_model_output/svm_scores
@@ -111,4 +167,29 @@ knnScores:
 dtcScores:
   type: pickle.PickleDataSet
   filepath: data/07_model_output/decisionTreeClassifier_scores
+  layer: model_output
+
+LSTM1_scores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/LSTM1_scores
+  layer: model_output
+
+LSTM2_scores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/LSTM2_scores
+  layer: model_output
+
+CNN1_scores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/CNN1_scores
+  layer: model_output
+
+CNN2_scores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/CNN2_scores
+  layer: model_output
+
+feedwardNeuralNetwork_scores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/feedwardNeuralNetwork_scores
   layer: model_output
