@@ -13,29 +13,59 @@ resized_pictures:
   filepath: data/02_intermediate/resized_pictures
   layer: intermediate
 
+train_df:
+  type: pickle.PickleDataSet
+  filepath: data/02_intermediate/train_set
+  layer: intermediate
+
+test_df:
+  type: pickle.PickleDataSet
+  filepath: data/02_intermediate/test_set
+  layer: intermediate
+
 augmented_data:
   type: pickle.PickleDataSet
   filepath: data/03_primary/augmented_data
   layer: primary
 
-dataWithFeatures:
+trainDataFeatures:
   type: pickle.PickleDataSet
-  filepath: data/04_feature/dataWithFeatures
+  filepath: data/04_feature/trainDataFeatures
   layer: feature
 
-normalized_data:
+testDataFeatures:
   type: pickle.PickleDataSet
-  filepath: data/04_feature/normalized_data
+  filepath: data/04_feature/testDataFeatures
   layer: feature
 
-standardized_data:
+normalized_trainData:
   type: pickle.PickleDataSet
-  filepath: data/04_feature/standardized_data
+  filepath: data/04_feature/normalized_trainData
   layer: feature
 
-encoded_data:
+normalized_testData:
   type: pickle.PickleDataSet
-  filepath: data/04_feature/encoded_data
+  filepath: data/04_feature/normalized_testData
+  layer: feature
+
+standardized_trainData:
+  type: pickle.PickleDataSet
+  filepath: data/04_feature/standardized_trainData
+  layer: feature
+
+standardized_testData:
+  type: pickle.PickleDataSet
+  filepath: data/04_feature/standardized_testData
+  layer: feature
+
+encoded_trainData:
+  type: pickle.PickleDataSet
+  filepath: data/04_feature/encoded_trainData
+  layer: feature
+
+encoded_testData:
+  type: pickle.PickleDataSet
+  filepath: data/04_feature/encoded_testData
   layer: feature
 
 data_distribution:
