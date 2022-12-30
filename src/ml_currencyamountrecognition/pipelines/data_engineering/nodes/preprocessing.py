@@ -13,10 +13,7 @@ Returns
 def data_normalisation(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["image"] = dataframe["image"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
     dataframe["gray_image"] = dataframe["gray_image"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["prewitt"] = dataframe["prewitt"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["farid"] = dataframe["farid"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
     dataframe["variance"] = dataframe["variance"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
-    dataframe["invert"] = dataframe["invert"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
     dataframe["sobel"] = dataframe["sobel"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
     dataframe["gradient"] = dataframe["gradient"].apply(lambda img_array: img_array / np.linalg.norm(img_array))
     return dataframe
@@ -31,11 +28,8 @@ Returns
 def data_standardisation(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["image"] = dataframe["image"].apply(lambda img_array: img_array.reshape(-1))
     dataframe["gray_image"] = dataframe["gray_image"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["prewitt"] = dataframe["prewitt"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["farid"] = dataframe["farid"].apply(lambda img_array: img_array.reshape(-1))
     dataframe["variance"] = dataframe["variance"].apply(lambda img_array: img_array.reshape(-1))
     dataframe["edge"] = dataframe["edge"].apply(lambda img_array: img_array.reshape(-1))
-    dataframe["invert"] = dataframe["invert"].apply(lambda img_array: img_array.reshape(-1))
     dataframe["sobel"] = dataframe["sobel"].apply(lambda img_array: img_array.reshape(-1))
     dataframe["gradient"] = dataframe["gradient"].apply(lambda img_array: img_array.reshape(-1))
     return dataframe
@@ -51,6 +45,8 @@ Returns
 def ordinal_data_encoding(dataframe: pd.DataFrame) -> pd.DataFrame:
     label_encoder = preprocessing.LabelEncoder()
     dataframe["currency"] = label_encoder.fit_transform(dataframe["currency"])
+    labels = dataframe.apply(lambda x: str(x.currency) + '-' + str(x.amount), axis=1)
+    dataframe["labels"] = preprocessing.LabelEncoder().fit_transform(labels)
     dataframe["text"] = dataframe["text"].apply(lambda txt: int.from_bytes(txt.encode('unicode_escape'), "big"))
     return dataframe
 
@@ -66,12 +62,10 @@ Returns:
 '''
 def data_preparation_for_MLmodels(dataframe: pd.DataFrame) -> pd.DataFrame:
     features = []
-    X = dataframe.apply(lambda x: np.array(np.concatenate((x.image, x.gray_image, x.prewitt, x.farid, x.variance, x.edge, x.invert, x.sobel, x.gradient))), axis = 1)
+    X = dataframe.apply(lambda x: np.array(np.concatenate((x.image, x.gray_image, x.variance, x.sobel))), axis = 1)
     for i in range(len(X)):
         features.append(X[i])
-    currency_values = dataframe.currency.values.reshape(-1, 1)
-    amount_values = dataframe.amount.values.reshape(-1, 1)
-    labels = np.concatenate([currency_values, amount_values], axis=1)
+    labels = dataframe.labels
     X_train, X_test, y_train, y_test = train_test_split(features, labels, stratify=labels, test_size=0.2)
     return X_train, X_test, y_train, y_test
 

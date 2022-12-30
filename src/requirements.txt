@@ -19,3 +19,4 @@ sklearn~=0.0.post1
 scikit-learn~=1.0.2
 pytesseract~=0.3.10
 seaborn~=0.12.1
+tensorflow~=2.11.0

@@ -96,11 +96,8 @@ Returns:
 def feature_extraction(dataframe: pd.DataFrame) -> pd.DataFrame:
     dataframe["gray_image"] = dataframe["image"].apply(lambda img_array: cv2.cvtColor(img_array, cv2.COLOR_BGR2GRAY))
     dataframe["edge"] = dataframe["gray_image"].apply(lambda img_array: 1 * feature.canny(img_array, sigma=3))
-    dataframe["prewitt"] = dataframe["gray_image"].apply(lambda img_array: filters.prewitt(img_array))
-    dataframe["farid"] = dataframe["gray_image"].apply(lambda img_array: filters.farid(img_array))
     dataframe["variance"] = dataframe["gray_image"].apply(
         lambda img_array: nd.generic_filter(img_array, np.var, size=3))
-    dataframe["invert"] = dataframe["image"].apply(lambda img_array: cv2.bitwise_not(img_array))
     dataframe["sobel"] = dataframe["image"].apply(lambda img_array: filters.sobel(img_array))
     dataframe["gradient"] = dataframe["image"].apply(lambda img_array: cv2.Laplacian(img_array, cv2.CV_64F))
     dataframe["text"] = dataframe["image"].apply(lambda img_array: extract_text_from_image(img_array))

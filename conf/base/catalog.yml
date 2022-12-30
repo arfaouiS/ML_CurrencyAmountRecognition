@@ -52,3 +52,63 @@ images_plot:
   type: kedro.extras.datasets.matplotlib.MatplotlibWriter
   filepath: data/09_visualization/images_plot.png
   layer: visualization
+
+X_train:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/train_features
+  layer: model_input
+
+y_train:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/train_labels
+  layer: model_input
+
+X_test:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/test_features
+  layer: model_input
+
+y_test:
+  type: pickle.PickleDataSet
+  filepath: data/05_model_input/test_labels
+  layer: model_input
+
+svm_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/svm_model
+  layer: model
+
+nb_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/naiveBayes_model
+  layer: model
+
+knn_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/knn_model
+  layer: model
+
+dtc_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/decisionTree_model
+  layer: model
+
+svmScores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/svm_scores
+  layer: model_output
+
+nbScores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/naiveBayes_scores
+  layer: model_output
+
+knnScores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/knn_scores
+  layer: model_output
+
+dtcScores:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/decisionTreeClassifier_scores
+  layer: model_output

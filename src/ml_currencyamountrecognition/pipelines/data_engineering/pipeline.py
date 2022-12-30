@@ -11,7 +11,6 @@ from .nodes.preprocessing import *
 
 def create_pipeline(**kwargs) -> Pipeline:
     return pipeline([
-
         node(
             func=banknote_dataframe,
             inputs=["params:rawData_path", "params:currency_folder_names"],
@@ -71,5 +70,11 @@ def create_pipeline(**kwargs) -> Pipeline:
             inputs="standardized_data",
             outputs="encoded_data",
             name="encoded_data"
+        ),
+        node(
+            func=data_preparation_for_MLmodels,
+            inputs="encoded_data",
+            outputs=["X_train", "X_test", "y_train", "y_test"],
+            name="data_for_model"
         ),
     ])
