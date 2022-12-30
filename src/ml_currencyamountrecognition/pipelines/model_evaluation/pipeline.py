@@ -32,4 +32,29 @@ def create_pipeline(**kwargs) -> Pipeline:
             outputs="dtcScores",
             name="dtc_evaluation"
         ),
+        node(
+            func=dlModel_evaluation,
+            inputs=["X_test_DL", "y_test_DL", "model_LSTM1"],
+            outputs="LSTM1_scores"
+        ),
+        node(
+            func=dlModel_evaluation,
+            inputs=["X_test_DL", "y_test_DL", "model_LSTM2"],
+            outputs="LSTM2_scores"
+        ),
+        node(
+            func=dlModel_evaluation,
+            inputs=["X_test_DL", "y_test_DL", "model_CNN1"],
+            outputs="CNN1_scores"
+        ),
+        node(
+            func=dlModel_evaluation,
+            inputs=["X_test_DL", "y_test_DL", "model_CNN2"],
+            outputs="CNN2_scores"
+        ),
+        node(
+            func=dlModel_evaluation,
+            inputs=["X_test_DL", "y_test_DL", "model_feedward_neural_network"],
+            outputs="feedwardNeuralNetwork_scores"
+        ),
     ])
