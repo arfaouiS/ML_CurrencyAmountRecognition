@@ -157,7 +157,7 @@ def read_text(image_path):
     krn = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 3))
     dlt = cv2.dilate(msk, krn, iterations=1)
     thr = 255 - cv2.bitwise_and(dlt, msk)
-    pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+    pytesseract.pytesseract.tesseract_cmd = 'Tesseract-OCR\\tesseract.exe'
     text = pytesseract.image_to_string(thr, config="--psm 10")
     return text
 
