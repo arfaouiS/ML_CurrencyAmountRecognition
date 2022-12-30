@@ -1,6 +1,6 @@
-currency_folder_names: ['AUD', 'GBP', 'JPY', 'USD']
-rawData_path: 'data/01_raw'
+currency_folder_names: ['AUD', 'GBP', 'JPY', 'USD','EUR']
+rawData_path: 'data/00_test'
 svmGridparams: {'C': [1, 10, 100], 'gamma': [1, 0.1, 0.01]}
 nbGridparams: {'var_smoothing': [1e-9, 1e-8, 1e-7, 1e-6]}
 knnGridparams: {'n_neighbors': [2, 3, 4, 5], 'weights': ['uniform', 'distance']}
-decisionTreeGridparams: {'max_depth': [2, 4, 6, 8], 'min_samples_split': [2, 4, 6, 8]}
+decisionTreeGridparams: {'max_depth': [2, 4, 6, 8]}
